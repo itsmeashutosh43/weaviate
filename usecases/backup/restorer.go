@@ -168,9 +168,14 @@ func (r *restorer) restoreOne(ctx context.Context,
 		defer timer.ObserveDuration()
 	}
 
-	if r.sourcer.ClassExists(desc.Name) {
-		return fmt.Errorf("already exists")
-	}
+	// if r.sourcer.ClassExists(desc.Name) {
+	// 	return fmt.Errorf("already exists")
+	// }
+
+	r.logger.WithField("action" , "restore").
+		WithField("backup_id", desc.ID).
+		WithField("class", cdesc.Name).Info("successfully ignored class check")
+
 	fw := newFileWriter(r.sourcer, store, backupID)
 	rollback, err := fw.Write(ctx, desc)
 	if err != nil {
